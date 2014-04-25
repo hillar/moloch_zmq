@@ -14,9 +14,7 @@
 
 extern MolochConfig_t        config;
 extern void                 *esServer;
-
 static void *zsocket;
-
 
 typedef struct {
     MolochSession_t *session;
@@ -34,21 +32,9 @@ typedef struct {
 } HTTPInfo_t;
 
 
-void zmqexp_handle_header(MolochSession_t *session, http_parser *hp, const char *at, size_t length) {
-    HTTPInfo_t *http = hp->data;
-
-    if (strcasecmp("x-forwarded-for", http->header[session->which]) == 0) {
-        g_string_append(http->urlString, "\tX-Forwarded-For: ");
-        g_string_append_len(http->urlString, at, length);
-    }
-}
-
-
-
-
 void zmqexp_handle_complete(MolochSession_t *session, http_parser *hp) {
-    HTTPInfo_t *http = hp->data;
 
+    HTTPInfo_t *http = hp->data;
 
     GString *smsg;
     struct in_addr src, dst;
@@ -62,50 +48,19 @@ void zmqexp_handle_complete(MolochSession_t *session, http_parser *hp) {
     memcpy(&dst, &session->addr2, sizeof(session->addr2));
 
     smsg =g_string_new("");
+    g_string_printf(smsg,"http\t%i\t%i\t%i\t%i\t%s\t%s\t",src, session->port1, dst, session->port2, host, url);
 
-    g_string_printf(smsg,"http\t%s\t%i\t",inet_ntoa(src), session->port1);
-    g_string_append_printf(smsg,"%s\t%i\t%s\t%s",
-                    inet_ntoa(dst), session->port2, host, url);
     //LOG("sending %s", smsg->str);
-
 
     zmq_send(zsocket, smsg->str, smsg->len, 0);
     g_string_free(smsg, FALSE);
 
 }
 
-
-
 void zmqexp_exit() {
     LOG("zmqexp exit");
 }
 
-void zmqexp_save(MolochSession_t *session, int UNUSED(final)) {
-
-    if (session->fields[MOLOCH_FIELD_DNS_HOST]) {
-        /* compute cluster */
-
-    }
-
-}
-void moloch_ipfunc(MolochSession_t *session, struct ip *packet, int len) {
-
-}
-
-void moloch_udpfunc(MolochSession_t *session, struct udphdr *udphdr, unsigned char *data, int len) {
-}
-
-void moloch_tcpfunc(MolochSession_t *session, struct tcp_stream *a_tcp) {
-
-}
-
-void moloch_presave() {
-
-}
-
-void moloch_newfunc() {
-
-}
 void moloch_plugin_init()
 {
     char *zmqconfig;
@@ -141,7 +96,7 @@ void moloch_plugin_init()
                               NULL,
                               NULL,//         zmqexp_handle_url,
                               NULL,//handle_header,
-                              zmqexp_handle_header, //NULL,// handle_header_val,
+                              NULL,//zmqexp_handle_header, //NULL,// handle_header_val,
                               NULL,// handle_header_complete,
                               NULL,
                               zmqexp_handle_complete
@@ -151,7 +106,7 @@ void moloch_plugin_init()
       NULL,
       NULL,
       NULL,
-      zmqexp_save,
+      NULL,//zmqexp_save,
       NULL,
       zmqexp_exit,
       NULL

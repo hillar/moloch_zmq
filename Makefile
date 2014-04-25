@@ -3,8 +3,8 @@ CC            = gcc
 INCLUDE_PCAP  = -I/home/fygrave/devel/moloch/thirdparty/libpcap-1.3.0
 
 INCLUDE_OTHER = -I.. -I../thirdparty \
-                -I/home/fygrave/devel/moloch/thirdparty/glib-2.34.3/glib -I/home/fygrave/devel/moloch/thirdparty/glib-2.34.3 -I/home/fygrave/devel/moloch/thirdparty/glib-2.34.3/gmodule -I/home/fygrave/devel/moloch/thirdparty/glib-2.34.3/gobject \
-	        -I/home/fygrave/devel/moloch/thirdparty/libnids-1.24/src
+                -I../thirdparty/glib-2.34.3/glib -I../thirdparty/glib-2.34.3 -I/../thirdparty/glib-2.34.3/gmodule -I../thirdparty/glib-2.34.3/gobject \
+	        -I../thirdparty/libnids-1.24/src
 
 mkdir_p = mkdir -p --
 INSTALL = /usr/bin/install -c
