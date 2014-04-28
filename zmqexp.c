@@ -42,13 +42,13 @@ void zmqexp_handle_complete(MolochSession_t *session, http_parser *hp) {
     if (http == NULL || http->urlString == NULL || http->hostString == NULL) {
         return;
     }
-    char *url = http->urlString->str;
-    char *host = http->hostString->str;
-    memcpy(&src, &session->addr1, sizeof(session->addr1));
-    memcpy(&dst, &session->addr2, sizeof(session->addr2));
+    //char *url = http->urlString->str;
+    //char *host = http->hostString->str;
+    //memcpy(&src, &session->addr1, sizeof(session->addr1));
+    //memcpy(&dst, &session->addr2, sizeof(session->addr2));
 
     smsg =g_string_new("");
-    g_string_printf(smsg,"http\t%i\t%i\t%i\t%i\t%s\t%s\t",src, session->port1, dst, session->port2, host, url);
+    g_string_printf(smsg,"http\t%u\t%u\t%u\t%u\t%s\t%s\t",htonl(session->addr1), session->port1, htonl(session->addr2), session->port2, http->hostString->str, http->urlString->str);
 
     //LOG("sending %s", smsg->str);
 

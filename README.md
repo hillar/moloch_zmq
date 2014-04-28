@@ -8,7 +8,7 @@ This ZMQ integration/data explort plugin for Moloch (http://github.com/aol/moloc
 Acts as ZMQ PUB(lisher), which you need to connect to using your client(s) and perform additional real-time analysis
 of network data. 
 
-Presently only HTTP traffic (src ip, dst ip, ports, url and X-Forwarded-For headers are sent). The plugin could be further 
+Presently only HTTP traffic (src ip, dst ip, ports, url ~~and X-Forwarded-For headers~~ are sent). The plugin could be further 
 extended to hook into other protocols as well.
 
 Only two 0MQ patterns are supported on the moment. Push/Pull and Pub/Sub. 
